@@ -41,6 +41,7 @@ model{
     intercept + attack[away_team] - defense[home_team]
   );
 
+  intercept ~ normal(0, 2);
   home_advantage ~ normal(0, 2);
   attack_free ~ normal(0, 3);
   defense_free ~ normal(0, 3);
