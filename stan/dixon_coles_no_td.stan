@@ -1,4 +1,4 @@
-// Dixon Coles model, no temporal decay, no hierarchies, sum to 0 constraint
+// Dixon Coles model, no temporal decay, no sum-to-0 constraint
 // This one is a bit more complicated by introducing an independence correction
 // The full model also has a temporal decay term which seems rather hard to implement
 // Here's the paper:
@@ -79,8 +79,8 @@ model{
     intercept + attack[away_team] - defense[home_team]
   );
 
-  home_advantage ~ normal(0, .3);
-  intercept ~ normal(0, .5);
+  home_advantage ~ normal(0, 3);
+  intercept ~ normal(0, 3);
   attack ~ std_normal();
   defense~ std_normal();
   rho_raw ~ uniform(0, 1);
