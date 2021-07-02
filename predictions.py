@@ -113,8 +113,49 @@ def predict_outcomes_dixon_coles(
             log_rate_away
         )
         p = poi_home.pmf(x) * poi_away.pmf(y) * tau
-        try:
-            A[x, y] = p.mean()
-        except:
-            set_trace()
+        A[x, y] = p.mean()
+    return A / A.sum()
+
+
+def predict_outcomes_dixon_coles_et(
+    attack_home,
+    attack_away,
+    defense_home,
+    defense_away,
+    intercept,
+    rho,
+    home_team,
+    away_team,
+    location
+):
+    """
+    This one predicts outcomes assuming there's extra time (2 * 15) minutes
+    Assuming that goals are equally distributed in the extra time and the regular time
+    Just scales the poisson rates accordingly
+    """
+    N_GOALS = 15
+    #construct a grid of 15x15 which corresponds to 0-14 possible goals
+    #which honestly is already complete overkill but shouldn't hurt
+    home_goals, away_goals = [X.flatten() for X in np.meshgrid(np.arange(N_GOALS), np.arange(N_GOALS))]
+    log_rate_home = intercept + attack_home - defense_away
+    log_rate_away = intercept + attack_away - defense_home
+    if home_team == location:
+        log_rate_home += home_advantage
+    if away_team == location:
+        log_rate_away += home_advantage
+    #extra time is 2 * 15 minutes, so we should just be able to multiply the poisson rates with 4/3
+    rate_home = np.exp(log_rate_home) * 4/3
+    rate_away = np.exp(log_rate_away) * 4/3
+    poi_home = poisson(rate_home[:, None])
+    poi_away = poisson(rate_away[:, None])
+    A = np.zeros((N_GOALS, N_GOALS))
+    for x, y in zip(home_goals, away_goals):
+        tau = _tau(
+            x, y,
+            rho,
+            rate_home,
+            log_rate_away
+        )
+        p = poi_home.pmf(x) * poi_away.pmf(y) * tau
+        A[x, y] = p.mean()
     return A / A.sum()
