@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patheffects as PathEffects
 import seaborn as sns
 from itertools import product
+import numpy as np
 
 
 def plot_goal_predictions(A, home_team, away_team, ax=None):
