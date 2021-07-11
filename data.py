@@ -17,6 +17,7 @@ def get_data():
         header=0,
         index_col=0
     )
+    df.index = pd.to_datetime(df.index)
     df = df.drop(['tournament', 'city'], axis=1)
     return df.loc[(1 - df.away_score.isna()).astype(bool)]
 
@@ -27,3 +28,10 @@ def cut_data(df, start_idx='2016-01-01'):
     by default, we'll keep everything from 2016 onwards
     """
     return df.loc[start_idx:]
+
+
+def add_time(df):
+    idx = pd.DatetimeIndex(df.index)
+    idx = (max(idx) - idx).days.to_numpy()
+    df['time'] = idx
+    return df
