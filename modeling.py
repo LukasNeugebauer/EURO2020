@@ -39,4 +39,7 @@ def prepare_stan_data(df):
     stan_data['home_goals'] = df.home_score.values.astype(int)
     stan_data['away_goals'] = df.away_score.values.astype(int)
     stan_data['is_home'] = np.logical_not(df.neutral.values).astype(int)
+    # optionally add the days for the temporal decay DC-model
+    if 'time' in df:
+        stan_data['time'] = df.time
     return stan_data
