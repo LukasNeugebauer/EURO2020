@@ -16,22 +16,27 @@ def plot_goal_predictions(A, home_team, away_team, ax=None):
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 10), constrained_layout=True)
-    sns.heatmap(A, cmap='magma', cbar=False, ax=ax)
-    x_max, y_max = A.shape;
+    sns.heatmap(A, cmap="magma", cbar=False, ax=ax)
+    x_max, y_max = A.shape
     for x, y in product(range(x_max), range(y_max)):
         txt = ax.text(
-            y + .5, x + .5, str(round(A[x,y] * 100, 2)) + ' %',
-            ha='center', va='center', color='w', size=20
+            y + 0.5,
+            x + 0.5,
+            str(round(A[x, y] * 100, 2)) + " %",
+            ha="center",
+            va="center",
+            color="w",
+            size=20,
         )
-        txt.set_path_effects([PathEffects.withStroke(linewidth=5, foreground='k')])
-    ax.set_aspect('equal')
+        txt.set_path_effects([PathEffects.withStroke(linewidth=5, foreground="k")])
+    ax.set_aspect("equal")
     ax.set_xlabel(away_team, fontsize=30)
     ax.set_ylabel(home_team, fontsize=30)
-    ax.set_xticks(np.arange(A.shape[1]) + .5)
+    ax.set_xticks(np.arange(A.shape[1]) + 0.5)
     ax.set_xticklabels(np.arange(A.shape[1]), fontsize=25)
-    ax.set_yticks(np.arange(A.shape[0]) + .5)
+    ax.set_yticks(np.arange(A.shape[0]) + 0.5)
     ax.set_yticklabels(np.arange(A.shape[0]), fontsize=25)
-    ax.set_title('Exact predictions', fontsize=30)
+    ax.set_title("Exact predictions", fontsize=30)
     if ax is None:
         return fig
 
@@ -47,17 +52,17 @@ def plot_outcome_prob(A, home_team, away_team, ax=None):
     y = np.array([p_home, p_draw, p_away])
     if ax is None:
         ax = plt.axes()
-    sns.barplot(x, y, hue=y, palette='magma', dodge=False, ax=ax)
-    ax.legend('')
+    sns.barplot(x, y, hue=y, palette="magma", dodge=False, ax=ax)
+    ax.legend("")
     ax.set_xticks(x)
     ax.set_yticks([])
-    ax.set_xticklabels([home_team, 'Draw', away_team], fontsize=25)
-    ax.set_title('Outcome probabilities', fontsize=30)
+    ax.set_xticklabels([home_team, "Draw", away_team], fontsize=25)
+    ax.set_title("Outcome probabilities", fontsize=30)
     for i, p in enumerate(y):
-        ax.text(i, p, str(round(p * 100)) + ' %', ha='center', va='bottom', fontsize=20)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_visible(False)
+        ax.text(i, p, str(round(p * 100)) + " %", ha="center", va="bottom", fontsize=20)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
 
 
 def plot_diff_prob(A, home_team, away_team, ax=None):
@@ -69,16 +74,16 @@ def plot_diff_prob(A, home_team, away_team, ax=None):
     y = list(diffs.values())
     if ax is None:
         ax = plt.axes()
-    g = sns.barplot(x=x, y=y, hue=y, palette='magma', dodge=False, ax=ax)
+    g = sns.barplot(x=x, y=y, hue=y, palette="magma", dodge=False, ax=ax)
     g.legend_.remove()
     ax.set_yticks([])
-    #ax.set_xticks(np.arange())
+    # ax.set_xticks(np.arange())
     ax.set_xticklabels(x, fontsize=25)
-    ax.set_title(f'P of {home_team} - {away_team} goal differences', fontsize=30)
-    for l in ['left', 'right', 'top']:
+    ax.set_title(f"P of {home_team} - {away_team} goal differences", fontsize=30)
+    for l in ["left", "right", "top"]:
         ax.spines[l].set_visible(False)
     for i, p in enumerate(y):
-        ax.text(i, p, str(round(p * 100)) + ' %', ha='center', va='bottom', fontsize=20)
+        ax.text(i, p, str(round(p * 100)) + " %", ha="center", va="bottom", fontsize=20)
 
 
 def plot_full_predictions(A, home_team, away_team, cutoff=5):
@@ -86,7 +91,9 @@ def plot_full_predictions(A, home_team, away_team, cutoff=5):
     Do all of the above at once
     """
     fig, axs = plt.subplots(ncols=3, nrows=1, figsize=(30, 10), constrained_layout=True)
-    plot_goal_predictions(A[:cutoff + 1, :cutoff + 1], home_team, away_team, ax=axs[0])
+    plot_goal_predictions(
+        A[: cutoff + 1, : cutoff + 1], home_team, away_team, ax=axs[0]
+    )
     plot_outcome_prob(A, home_team, away_team, ax=axs[1])
     plot_diff_prob(A, home_team, away_team, ax=axs[2])
     return fig
