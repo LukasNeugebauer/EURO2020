@@ -68,7 +68,7 @@ def plot_outcome_prob(A, home_team, away_team, ax=None, odds=False):
     odd_values = (1 / y).round(2)
     if ax is None:
         ax = plt.axes()
-    sns.barplot(x, y, hue=y, palette="magma", dodge=False, ax=ax)
+    sns.barplot(x=x, y=y, hue=y, palette="magma", dodge=False, ax=ax)
     ax.legend("")
     ax.set_xticks(x)
     ax.set_yticks([])
