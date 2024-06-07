@@ -10,7 +10,7 @@ from countries import get_country_list, country_to_idx
 import numpy as np
 
 
-def compile_or_load(filename, force=False):
+def compile_or_load(filename, force=False, **compile_kwargs):
     """
     Unpickle model if it has been compiled before
     compile and pickle otherwise
@@ -20,7 +20,7 @@ def compile_or_load(filename, force=False):
         with open(picfile, "rb") as f:
             model = pickle.load(f)
     else:
-        model = StanModel(filename)
+        model = StanModel(filename, **compile_kwargs)
         with open(picfile, "wb") as f:
             pickle.dump(model, f, -1)
     return model
